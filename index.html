@@ -3,823 +3,1878 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>בדרך לחופה - בנימין ויונינה</title>
-    <!-- Firebase SDKs -->
+
+    <!-- Firebase Compat SDK -->
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore-compat.js"></script>
-    
+
     <style>
+
         :root {
             --gold: #d4af37;
             --gold-light: #f1d592;
+
             --turquoise: #40AFA9;
             --turquoise-dark: #2D8B86;
+
             --antique-pink: #C58B8B;
             --antique-pink-dark: #A66B6B;
+
             --white: #ffffff;
             --text: #4a4a4a;
+
             --success: #4CAF50;
             --error: #e57373;
+
             --bg-soft: #fffaf1;
         }
 
+
+        * {
+            box-sizing: border-box;
+        }
+
+
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: "Segoe UI", system-ui, sans-serif;
+
             color: var(--text);
-            margin: 0; padding: 0;
+
+            margin: 0;
+            padding: 0;
+
             direction: rtl;
+
             overflow-x: hidden;
+
             background-color: var(--bg-soft);
+
             min-height: 100vh;
         }
 
+
         body::before {
             content: "";
+
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop');
-            background-size: cover; background-position: center;
-            opacity: 0.08; z-index: -1;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background-image:
+                url("https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2069&auto=format&fit=crop");
+
+            background-size: cover;
+            background-position: center;
+
+            opacity: 0.08;
+
+            z-index: -1;
         }
 
+
         .container {
+
             width: 92%;
+
             max-width: 650px;
+
             margin: 20px auto;
+
             padding: 25px;
-            background: rgba(255, 255, 255, 0.98);
+
+            background: rgba(255,255,255,0.98);
+
             border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+
+            box-shadow:
+                0 10px 40px rgba(0,0,0,0.1);
+
             text-align: center;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+
+            border:
+                1px solid rgba(212,175,55,0.2);
+
             position: relative;
+
             z-index: 10;
         }
 
-        .host-container { max-width: 1100px; }
+
+        .host-container {
+            max-width: 1100px;
+        }
+
 
         h1 {
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--gold),
+                    var(--gold-light)
+                );
+
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+
             font-size: 2.2rem;
+
             margin: 10px 0;
         }
 
+
         .screen {
             display: none;
-            animation: fadeIn 0.4s ease;
+
+            animation:
+                fadeIn 0.4s ease;
         }
+
 
         .active {
             display: block;
         }
 
+
         @keyframes fadeIn {
+
             from {
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        /* Guest Button - Turquoise */
+
+        /* =========================
+           BUTTONS
+        ========================== */
+
         button {
+
             padding: 14px 28px;
+
             font-size: 18px;
+
             border-radius: 50px;
+
             border: none;
-            background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark));
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--turquoise),
+                    var(--turquoise-dark)
+                );
+
             color: white;
+
             cursor: pointer;
+
             transition: 0.3s;
+
             margin: 8px 0;
+
             font-weight: bold;
-            box-shadow: 0 4px 15px rgba(64, 175, 169, 0.2);
+
+            box-shadow:
+                0 4px 15px rgba(64,175,169,0.2);
+
             width: 100%;
         }
 
+
         button:hover {
+
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(64, 175, 169, 0.4);
+
+            box-shadow:
+                0 6px 20px rgba(64,175,169,0.4);
         }
 
+
         button:disabled {
+
             background: #e0e0e0;
+
             color: #999;
+
             cursor: not-allowed;
+
             transform: none;
+
             box-shadow: none;
         }
 
-        /* Couple Button - Antique Pink */
+
+        /* Couple button */
+
         .couple-select-btn {
-            background: linear-gradient(135deg, var(--antique-pink), var(--antique-pink-dark)) !important;
-            box-shadow: 0 4px 15px rgba(197, 139, 139, 0.2) !important;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--antique-pink),
+                    var(--antique-pink-dark)
+                ) !important;
+
+            box-shadow:
+                0 4px 15px rgba(197,139,139,0.2) !important;
+
             color: white !important;
+
             border: none !important;
         }
 
-        /* Chuppah Path with Personal Lanes */
-        .path-wrapper {
-            position: relative;
-            background: white;
-            border: 2px solid var(--gold-light);
-            border-radius: 20px;
-            padding: 40px 10px;
-            margin: 30px 0;
-            overflow-y: auto;
-            max-height: 480px;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
+
+        /* =========================
+           BACK BUTTON
+        ========================== */
+
+        .back-wrap {
+
+            width: 100%;
+
+            display: flex;
+
+            justify-content: flex-start;
+
+            direction: rtl;
         }
 
+
+        .back-btn {
+
+            width: auto !important;
+
+            min-width: 125px;
+
+            padding:
+                10px
+                20px !important;
+
+            margin:
+                0
+                0
+                18px
+                0 !important;
+
+            background: #f4f4f4 !important;
+
+            color: #666 !important;
+
+            border:
+                1px solid #e1e1e1 !important;
+
+            box-shadow: none !important;
+
+            font-size: 16px !important;
+
+            font-weight: bold;
+        }
+
+
+        .back-btn:hover {
+
+            transform: none !important;
+
+            background: #eaeaea !important;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.08) !important;
+        }
+
+
+        /* =========================
+           CHUPPAH PATH
+        ========================== */
+
+        .path-wrapper {
+
+            position: relative;
+
+            background: white;
+
+            border:
+                2px solid var(--gold-light);
+
+            border-radius: 20px;
+
+            padding: 40px 10px;
+
+            margin: 30px 0;
+
+            overflow-y: auto;
+
+            max-height: 480px;
+
+            box-shadow:
+                inset
+                0 2px
+                10px rgba(0,0,0,0.05);
+        }
+
+
         .chuppah-goal {
+
             position: absolute;
+
             left: 15px;
+
             top: 0;
             bottom: 0;
+
             width: 90px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             font-size: 55px;
-            background: rgba(212, 175, 55, 0.05);
-            border-right: 2px dashed var(--gold-light);
+
+            background:
+                rgba(212,175,55,0.05);
+
+            border-right:
+                2px dashed var(--gold-light);
+
             z-index: 5;
         }
 
+
         .participants-lanes {
+
             display: flex;
+
             flex-direction: column;
+
             gap: 12px;
+
             padding-left: 110px;
         }
 
+
         .p-lane {
+
             position: relative;
+
             height: 44px;
-            background: rgba(0,0,0,0.03);
+
+            background:
+                rgba(0,0,0,0.03);
+
             border-radius: 22px;
+
             width: 100%;
         }
 
+
         .p-avatar-box {
+
             position: absolute;
+
             right: 0;
+
             top: 50%;
-            transform: translateY(-50%);
-            transition: all 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+            transform:
+                translateY(-50%);
+
+            transition:
+                all 1.5s
+                cubic-bezier(
+                    0.34,
+                    1.56,
+                    0.64,
+                    1
+                );
+
             display: flex;
+
             align-items: center;
+
             gap: 8px;
         }
 
+
         .avatar-circle {
+
             width: 40px;
             height: 40px;
+
             background: white;
-            border: 2px solid var(--gold);
+
+            border:
+                2px solid var(--gold);
+
             border-radius: 50%;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             font-size: 22px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+            box-shadow:
+                0 4px 8px rgba(0,0,0,0.1);
         }
 
+
         .p-name-tag {
+
             font-size: 13px;
+
             font-weight: bold;
+
             background: white;
-            padding: 2px 10px;
+
+            padding:
+                2px 10px;
+
             border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+
+            box-shadow:
+                0 2px 5px rgba(0,0,0,0.05);
+
             white-space: nowrap;
         }
 
-        /* Leaderboard and Podium */
+
+        /* =========================
+           LEADERBOARD
+        ========================== */
+
         .leaderboard-container {
+
             margin-top: 25px;
+
             background: #fff;
+
             border-radius: 20px;
+
             padding: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+
+            box-shadow:
+                0 5px 20px rgba(0,0,0,0.05);
         }
 
+
         .lb-table {
+
             width: 100%;
+
             border-collapse: collapse;
         }
 
+
         .lb-table th {
-            color: var(--turquoise);
+
+            color:
+                var(--turquoise);
+
             padding: 10px;
-            border-bottom: 2px solid var(--bg-soft);
+
+            border-bottom:
+                2px solid var(--bg-soft);
         }
 
+
         .lb-table td {
+
             padding: 10px;
-            border-bottom: 1px solid var(--bg-soft);
+
+            border-bottom:
+                1px solid var(--bg-soft);
+
             font-weight: bold;
         }
 
+
+        /* =========================
+           PODIUM
+        ========================== */
+
         .podium-box {
+
             display: flex;
+
             align-items: flex-end;
+
             justify-content: center;
+
             gap: 15px;
-            margin: 60px 0 30px;
+
+            margin:
+                60px 0
+                30px;
+
             height: 280px;
         }
 
+
         .podium-step {
+
             display: flex;
+
             flex-direction: column;
+
             align-items: center;
+
             width: 130px;
-            animation: slideUp 1s ease-out;
+
+            animation:
+                slideUp 1s ease-out;
         }
+
 
         .step-base {
+
             width: 100%;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             font-size: 45px;
+
             font-weight: bold;
-            color: rgba(255,255,255,0.9);
-            border-radius: 15px 15px 0 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+
+            color:
+                rgba(255,255,255,0.9);
+
+            border-radius:
+                15px 15px 0 0;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.1);
         }
 
+
         .gold-step {
+
             height: 180px;
-            background: linear-gradient(to top, #BF953F, #FCF6BA, #B38728);
+
+            background:
+                linear-gradient(
+                    to top,
+                    #BF953F,
+                    #FCF6BA,
+                    #B38728
+                );
+
             z-index: 3;
         }
 
+
         .silver-step {
+
             height: 130px;
-            background: linear-gradient(to top, #757F9A, #D7DDE8);
+
+            background:
+                linear-gradient(
+                    to top,
+                    #757F9A,
+                    #D7DDE8
+                );
+
             z-index: 2;
         }
 
+
         .bronze-step {
+
             height: 90px;
-            background: linear-gradient(to top, #804A00, #A0522D);
+
+            background:
+                linear-gradient(
+                    to top,
+                    #804A00,
+                    #A0522D
+                );
+
             z-index: 1;
         }
 
+
         .winner-data {
+
             margin-bottom: 15px;
+
             text-align: center;
         }
 
+
         .winner-av {
+
             font-size: 50px;
+
             margin-bottom: 5px;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
+
+            filter:
+                drop-shadow(
+                    0 5px 10px rgba(0,0,0,0.1)
+                );
         }
 
+
         .winner-nm {
+
             font-weight: 800;
+
             font-size: 18px;
+
             color: var(--text);
         }
 
+
         @keyframes slideUp {
+
             from {
-                transform: translateY(150px);
+
+                transform:
+                    translateY(150px);
+
                 opacity: 0;
             }
+
             to {
-                transform: translateY(0);
+
+                transform:
+                    translateY(0);
+
                 opacity: 1;
             }
         }
 
-        /* Celebration */
+
+        /* =========================
+           FIREWORKS
+        ========================== */
+
         #fw-canvas {
+
             position: fixed;
+
             top: 0;
             left: 0;
+
             width: 100%;
             height: 100%;
+
             pointer-events: none;
+
             z-index: 9999;
         }
 
-        /* Avatar Selection */
+
+        /* =========================
+           AVATARS
+        ========================== */
+
         .avatar-grid {
+
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(50px,1fr)
+                );
+
             gap: 12px;
+
             padding: 20px;
+
             background: white;
+
             border-radius: 20px;
+
             max-height: 250px;
+
             overflow-y: auto;
-            border: 1px solid #f0f0f0;
+
+            border:
+                1px solid #f0f0f0;
         }
+
 
         .avatar-opt {
+
             font-size: 32px;
+
             cursor: pointer;
-            border: 2px solid transparent;
+
+            border:
+                2px solid transparent;
+
             border-radius: 50%;
+
             width: 50px;
             height: 50px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             transition: 0.2s;
         }
+
 
         .avatar-opt.selected {
-            border-color: var(--gold);
+
+            border-color:
+                var(--gold);
+
             background: #fffdf5;
+
             transform: scale(1.15);
-            box-shadow: 0 4px 10px rgba(212, 175, 55, 0.2);
+
+            box-shadow:
+                0 4px 10px
+                rgba(212,175,55,0.2);
         }
 
+
+        /* =========================
+           INPUT
+        ========================== */
+
         input {
+
             padding: 16px;
+
             width: 100%;
+
             border-radius: 15px;
-            border: 2px solid #f0f0f0;
+
+            border:
+                2px solid #f0f0f0;
+
             margin-bottom: 20px;
+
             text-align: center;
+
             font-size: 18px;
+
             box-sizing: border-box;
+
             outline: none;
+
             transition: 0.2s;
         }
 
+
         input:focus {
-            border-color: var(--turquoise);
-            box-shadow: 0 0 10px rgba(64, 175, 169, 0.1);
+
+            border-color:
+                var(--turquoise);
+
+            box-shadow:
+                0 0 10px
+                rgba(64,175,169,0.1);
         }
+
+
+        /* =========================
+           ANSWER BUTTONS
+        ========================== */
 
         .game-opt-btn {
+
             width: 100%;
+
             margin: 10px 0;
+
             background: white;
+
             color: var(--text);
-            border: 2px solid #f0f0f0;
+
+            border:
+                2px solid #f0f0f0;
+
             text-align: right;
-            padding: 18px 22px;
+
+            padding:
+                20px 24px;
+
             border-radius: 18px;
+
             font-weight: 600;
-            line-height: 1.4;
+
+            line-height: 1.5;
+
+            font-size: 20px !important;
         }
+
 
         .game-opt-btn.selected {
-            background: rgba(64, 175, 169, 0.1);
-            border-color: var(--turquoise);
+
+            background:
+                rgba(64,175,169,0.1);
+
+            border-color:
+                var(--turquoise);
         }
+
+
+        #couple-options
+        .couple-select-btn {
+
+            font-size: 20px !important;
+
+            line-height: 1.5 !important;
+
+            min-height: 65px;
+        }
+
+
+        /* =========================
+           MESSAGE
+        ========================== */
 
         #msg {
+
             position: fixed;
+
             top: 20px;
+
             left: 50%;
-            transform: translateX(-50%);
-            padding: 12px 30px;
+
+            transform:
+                translateX(-50%);
+
+            padding:
+                15px 30px;
+
             border-radius: 50px;
+
             color: white;
+
             display: none;
+
             z-index: 2000;
+
             font-weight: bold;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+
+            font-size: 18px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,0,0,0.15);
+
+            max-width: 90%;
+
+            text-align: center;
         }
+
 
         .question-counter {
+
             font-size: 14px;
+
             color: var(--gold);
+
             font-weight: bold;
+
             margin-bottom: 5px;
+
             display: block;
         }
+
 
         .final-rank-tag {
+
             font-size: 70px;
+
             margin: 25px 0;
+
             display: block;
         }
 
+
         .final-reinforcement {
+
             font-size: 26px;
+
             font-weight: bold;
+
             color: var(--gold);
+
             margin-bottom: 25px;
+
             line-height: 1.4;
         }
 
-        /* Large-screen / projector readability */
+
+        /* =========================
+           PROJECTOR
+        ========================== */
+
         @media (min-width: 900px) {
+
             .host-container {
+
                 max-width: 1500px;
+
                 width: 94%;
-                padding: 34px 44px;
+
+                padding:
+                    34px 44px;
             }
 
-            .host-container h1,
+
             #host-q-title {
-                font-size: clamp(3rem, 5vw, 5rem) !important;
+
+                font-size:
+                    clamp(
+                        3rem,
+                        5vw,
+                        5rem
+                    ) !important;
+
                 line-height: 1.1;
             }
 
-            #h-q-num,
-            .host-container .question-counter {
-                font-size: clamp(1.4rem, 2vw, 2.1rem) !important;
+
+            #h-q-num {
+
+                font-size:
+                    clamp(
+                        1.4rem,
+                        2vw,
+                        2.1rem
+                    ) !important;
             }
+
 
             #host-q-desc {
-                font-size: clamp(2rem, 3.1vw, 3.7rem) !important;
+
+                font-size:
+                    clamp(
+                        2rem,
+                        3.1vw,
+                        3.7rem
+                    ) !important;
+
                 min-height: 180px;
-                padding: 0 70px !important;
-                line-height: 1.3 !important;
+
+                padding:
+                    0 70px !important;
+
+                line-height:
+                    1.3 !important;
             }
+
 
             .path-wrapper {
+
                 max-height: 54vh;
+
                 min-height: 300px;
-                padding: 42px 14px;
+
+                padding:
+                    42px 14px;
             }
 
+
             .participants-lanes {
+
                 gap: 18px;
+
                 padding-left: 135px;
             }
 
+
             .p-lane {
+
                 height: 56px;
+
                 border-radius: 28px;
             }
 
+
             .avatar-circle {
+
                 width: 54px;
                 height: 54px;
+
                 font-size: 30px;
             }
 
+
             .p-name-tag {
-                font-size: clamp(1rem, 1.5vw, 1.4rem);
-                padding: 5px 14px;
+
+                font-size:
+                    clamp(
+                        1rem,
+                        1.5vw,
+                        1.4rem
+                    );
+
+                padding:
+                    5px 14px;
+
                 border-radius: 15px;
             }
 
+
             .chuppah-goal {
+
                 width: 110px;
+
                 font-size: 68px;
             }
 
+
             .leaderboard-container {
+
                 padding: 22px;
             }
 
+
             .leaderboard-container h3 {
+
                 font-size: 1.8rem;
             }
 
+
             .lb-table th,
             .lb-table td {
+
                 font-size: 1.25rem;
-                padding: 14px 12px;
+
+                padding:
+                    14px 12px;
             }
+
 
             .host-container button {
+
                 font-size: 1.35rem;
+
                 min-height: 62px;
             }
+
+
+            .back-btn {
+
+                min-width: 155px;
+
+                font-size:
+                    18px !important;
+
+                padding:
+                    13px 25px !important;
+            }
         }
+
 
         @media (min-width: 1400px) {
-            .host-container h1,
+
             #host-q-title {
-                font-size: 4.8rem !important;
+
+                font-size:
+                    4.8rem !important;
             }
+
 
             #host-q-desc {
-                font-size: 3.5rem !important;
+
+                font-size:
+                    3.5rem !important;
             }
         }
 
-        /* General readability improvements */
-        .game-opt-btn {
-            font-size: 20px !important;
-            padding: 20px 24px !important;
-            line-height: 1.5 !important;
-        }
-
-        #couple-options .couple-select-btn {
-            font-size: 20px !important;
-            line-height: 1.5 !important;
-        }
-
-        #q-text {
-            font-size: 26px !important;
-            line-height: 1.5 !important;
-        }
-
-        #couple-q-text {
-            font-size: 24px !important;
-            line-height: 1.5 !important;
-        }
 
         @media (max-width: 899px) {
+
             .host-container {
+
                 width: 94%;
+
                 padding: 22px;
             }
 
+
             #host-q-desc {
-                font-size: clamp(1.55rem, 5vw, 2.2rem) !important;
+
+                font-size:
+                    clamp(
+                        1.55rem,
+                        5vw,
+                        2.2rem
+                    ) !important;
+
                 min-height: 150px !important;
-                padding: 0 18px !important;
+
+                padding:
+                    0 18px !important;
+            }
+
+
+            #q-text {
+
+                font-size:
+                    26px !important;
+
+                line-height:
+                    1.5 !important;
+            }
+
+
+            #couple-q-text {
+
+                font-size:
+                    24px !important;
+
+                line-height:
+                    1.5 !important;
             }
         }
 
-        /* Back button */
-        .back-btn {
-            width: auto !important;
-            min-width: 130px;
-            padding: 11px 22px !important;
-            margin: 0 0 18px !important;
-            background: #f5f5f5 !important;
-            color: #666 !important;
-            border: 1px solid #e3e3e3 !important;
-            box-shadow: none !important;
-            font-size: 16px !important;
-            font-weight: 700;
-        }
-
-        .back-btn:hover {
-            transform: none !important;
-            background: #eeeeee !important;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08) !important;
-        }
-
-        .screen .back-wrap {
-            display: flex;
-            justify-content: flex-start;
-            direction: rtl;
-            width: 100%;
-        }
-
-        @media (min-width: 900px) {
-            .back-btn {
-                min-width: 155px;
-                font-size: 18px !important;
-                padding: 13px 25px !important;
-            }
-        }
     </style>
 </head>
 
+
 <body>
 
-<canvas id="fw-canvas"></canvas>
-<div id="msg"></div>
+    <canvas id="fw-canvas"></canvas>
 
-<!-- Screen 1: Role -->
-<div id="role-selection" class="container screen active">
-    <h1>בדרך לחופה 💍</h1>
-    <p style="font-size: 18px; color: #777;">בנימין ויונינה מתחתנים!</p>
+    <div id="msg"></div>
 
-    <div style="margin: 30px 0;">
-        <button onclick="initApp('player')">אני אורח/ת (משתתף)</button>
-        <button onclick="initApp('couple')" class="couple-select-btn">אנחנו הזוג (בנימין ויונינה)</button>
-        <button onclick="initApp('host')" style="background: #444; margin-top: 15px;">מסך המקרן (לאולם)</button>
-    </div>
-</div>
 
-<!-- Screen 2: Quick Register -->
-<div id="player-setup" class="container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
-    </div>
+    <!-- =====================================================
+         SCREEN 1 - ROLE SELECTION
+    ====================================================== -->
 
-    <h2>מצטרפים למסע!</h2>
+    <div
+        id="role-selection"
+        class="container screen active"
+    >
 
-    <input id="playerName" type="text" placeholder="השם שלכם">
+        <h1>
+            בדרך לחופה 💍
+        </h1>
 
-    <p style="margin-top: 10px; font-weight: bold; color: var(--gold);">
-        בחרו דמות שתייצג אתכם:
-    </p>
 
-    <div id="avatarList" class="avatar-grid"></div>
-
-    <button onclick="joinGame()" style="margin-top: 25px;">
-        בואו נשחק! 🎉
-    </button>
-</div>
-
-<!-- Screen 3: Waiting -->
-<div id="waiting-room" class="container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
-    </div>
-
-    <h2 id="wait-msg">מתכוננים לחופה...</h2>
-
-    <div id="my-id-label"
-         style="margin: 30px 0; font-size: 24px; font-weight: bold; color: var(--gold);">
-    </div>
-
-    <div style="font-size: 100px; margin: 30px 0;">💍</div>
-
-    <p>המתינו שהמנחה יתחיל את הסיטואציה הבאה</p>
-</div>
-
-<!-- Screen 4: Gameplay Player -->
-<div id="player-game" class="container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
-    </div>
-
-    <span class="question-counter" id="p-q-num"></span>
-
-    <h3 id="q-text"
-        style="font-size: 20px; margin-bottom: 25px; color: var(--gold); line-height: 1.5;">
-    </h3>
-
-    <div id="q-options"></div>
-
-    <div id="p-status-box"
-         style="margin-top: 30px; padding: 20px; border-radius: 20px; display: none;">
-
-        <p id="p-status"
-           style="font-weight: bold; margin: 0; font-size: 18px;">
+        <p
+            style="
+                font-size:22px;
+                color:#777;
+                font-weight:bold;
+            "
+        >
+            בנימין ויונינה מתחתנים!
         </p>
-    </div>
-</div>
 
-<!-- Screen 5: Couple Logic -->
-<div id="couple-game" class="container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
-    </div>
 
-    <h2 style="color: var(--antique-pink);">מה האמת שלכם? ❤️</h2>
+        <div
+            style="
+                margin:30px 0;
+            "
+        >
 
-    <span class="question-counter" id="c-q-num"></span>
+            <button onclick="initApp('player')">
+                אני אורח/ת (משתתף)
+            </button>
 
-    <p id="couple-q-text"
-       style="font-size: 18px; font-weight: bold; margin: 25px 0; line-height: 1.5;">
-    </p>
 
-    <div id="couple-options"></div>
+            <button
+                onclick="initApp('couple')"
+                class="couple-select-btn"
+            >
+                אנחנו הזוג (בנימין ויונינה)
+            </button>
 
-    <p id="couple-waiting"
-       style="color: #888; font-style: italic; display: none; margin-top: 40px; font-size: 18px;">
-        הבחירה נקלטה! המתינו לסיטואציה הבאה.
-    </p>
-</div>
 
-<!-- Screen 6: Host Board -->
-<div id="main-board-view" class="container host-container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
-    </div>
+            <button
+                onclick="initApp('host')"
+                style="
+                    background:#444;
+                    margin-top:15px;
+                "
+            >
+                מסך המקרן (לאולם)
+            </button>
 
-    <h1 id="host-q-title">המסע של בנימין ויונינה 💍</h1>
+        </div>
 
-    <span class="question-counter"
-          id="h-q-num"
-          style="font-size: 20px;">
-    </span>
-
-    <p id="host-q-desc"
-       style="font-size: 26px; font-weight: bold; color: var(--gold); min-height: 110px; padding: 0 40px; display: flex; align-items: center; justify-content: center; line-height: 1.4;">
-    </p>
-
-    <div class="path-wrapper">
-        <div class="chuppah-goal">💒</div>
-        <div id="lanes-container" class="participants-lanes"></div>
     </div>
 
-    <div id="leaderboard-box"
-         class="leaderboard-container"
-         style="display:none;">
 
-        <h3 style="margin-top:0; color: var(--turquoise-dark);">
-            דירוג נוכחי 📊
-        </h3>
+    <!-- =====================================================
+         SCREEN 2 - PLAYER SETUP
+    ====================================================== -->
 
-        <table class="lb-table">
-            <thead>
-                <tr>
-                    <th>מקום</th>
-                    <th>משתתף</th>
-                    <th>צעדים לחופה</th>
-                </tr>
-            </thead>
+    <div
+        id="player-setup"
+        class="container screen"
+    >
 
-            <tbody id="lb-body"></tbody>
-        </table>
+        <div class="back-wrap">
+
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
+
+        </div>
+
+
+        <h2>
+            מצטרפים למסע!
+        </h2>
+
+
+        <input
+            id="playerName"
+            type="text"
+            placeholder="השם שלכם"
+        >
+
+
+        <p
+            style="
+                margin-top:10px;
+                font-weight:bold;
+                color:var(--gold);
+                font-size:18px;
+            "
+        >
+            בחרו דמות שתייצג אתכם:
+        </p>
+
+
+        <div
+            id="avatarList"
+            class="avatar-grid"
+        ></div>
+
+
+        <button
+            onclick="joinGame()"
+            style="
+                margin-top:25px;
+            "
+        >
+            בואו נשחק! 🎉
+        </button>
+
     </div>
 
-    <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
 
-        <button id="startBtn"
+    <!-- =====================================================
+         SCREEN 3 - WAITING ROOM
+    ====================================================== -->
+
+    <div
+        id="waiting-room"
+        class="container screen"
+    >
+
+        <div class="back-wrap">
+
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
+
+        </div>
+
+
+        <h2
+            id="wait-msg"
+            style="
+                font-size:28px;
+            "
+        >
+            מתכוננים לחופה...
+        </h2>
+
+
+        <div
+            id="my-id-label"
+            style="
+                margin:30px 0;
+                font-size:28px;
+                font-weight:bold;
+                color:var(--gold);
+            "
+        ></div>
+
+
+        <div
+            style="
+                font-size:100px;
+                margin:30px 0;
+            "
+        >
+            💍
+        </div>
+
+
+        <p
+            style="
+                font-size:20px;
+            "
+        >
+            המתינו שהמנחה יתחיל את הסיטואציה הבאה
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCREEN 4 - PLAYER GAME
+    ====================================================== -->
+
+    <div
+        id="player-game"
+        class="container screen"
+    >
+
+        <div class="back-wrap">
+
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
+
+        </div>
+
+
+        <span
+            class="question-counter"
+            id="p-q-num"
+        ></span>
+
+
+        <h3
+            id="q-text"
+            style="
+                font-size:26px;
+                margin-bottom:25px;
+                color:var(--gold);
+                line-height:1.5;
+            "
+        ></h3>
+
+
+        <div id="q-options"></div>
+
+
+        <div
+            id="p-status-box"
+            style="
+                margin-top:30px;
+                padding:20px;
+                border-radius:20px;
+                display:none;
+            "
+        >
+
+            <p
+                id="p-status"
+                style="
+                    font-weight:bold;
+                    margin:0;
+                    font-size:20px;
+                "
+            ></p>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCREEN 5 - COUPLE GAME
+    ====================================================== -->
+
+    <div
+        id="couple-game"
+        class="container screen"
+    >
+
+        <div class="back-wrap">
+
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
+
+        </div>
+
+
+        <h2
+            style="
+                color:var(--antique-pink);
+                font-size:30px;
+            "
+        >
+            מה האמת שלכם? ❤️
+        </h2>
+
+
+        <span
+            class="question-counter"
+            id="c-q-num"
+        ></span>
+
+
+        <p
+            id="couple-q-text"
+            style="
+                font-size:24px;
+                font-weight:bold;
+                margin:25px 0;
+                line-height:1.5;
+            "
+        ></p>
+
+
+        <div id="couple-options"></div>
+
+
+        <p
+            id="couple-waiting"
+            style="
+                color:#888;
+                font-style:italic;
+                display:none;
+                margin-top:40px;
+                font-size:20px;
+            "
+        >
+            הבחירה נקלטה!
+            המתינו לסיטואציה הבאה.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCREEN 6 - HOST
+    ====================================================== -->
+
+    <div
+        id="main-board-view"
+        class="container host-container screen"
+    >
+
+        <div class="back-wrap">
+
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
+
+        </div>
+
+
+        <h1
+            id="host-q-title"
+        >
+            המסע של בנימין ויונינה 💍
+        </h1>
+
+
+        <span
+            class="question-counter"
+            id="h-q-num"
+        ></span>
+
+
+        <p
+            id="host-q-desc"
+            style="
+                font-size:26px;
+                font-weight:bold;
+                color:var(--gold);
+                min-height:110px;
+                padding:0 40px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                line-height:1.4;
+            "
+        ></p>
+
+
+        <div class="path-wrapper">
+
+            <div class="chuppah-goal">
+                💒
+            </div>
+
+
+            <div
+                id="lanes-container"
+                class="participants-lanes"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="leaderboard-box"
+            class="leaderboard-container"
+            style="display:none;"
+        >
+
+            <h3
+                style="
+                    margin-top:0;
+                    color:var(--turquoise-dark);
+                    font-size:28px;
+                "
+            >
+                דירוג נוכחי 📊
+            </h3>
+
+
+            <table class="lb-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            מקום
+                        </th>
+
+                        <th>
+                            משתתף
+                        </th>
+
+                        <th>
+                            צעדים לחופה
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="lb-body"
+                ></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            style="
+                margin-top:40px;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                gap:15px;
+            "
+        >
+
+            <button
+                id="startBtn"
                 onclick="updateGameStep(0)"
-                style="max-width: 350px;">
-            התחל את המשחק! 🎉
-        </button>
+                style="
+                    max-width:350px;
+                "
+            >
+                התחל את המשחק! 🎉
+            </button>
 
-        <button id="nextBtn"
-                style="display:none; max-width: 350px;"
-                onclick="stepForward()">
-            סיטואציה הבאה ⬅️
-        </button>
 
-        <button id="finishBtn"
-                style="display:none; max-width: 350px;"
-                onclick="updateGameStep(11)">
-            סיום וחשיפת המנצחים! 🏆
-        </button>
+            <button
+                id="nextBtn"
+                style="
+                    display:none;
+                    max-width:350px;
+                "
+                onclick="stepForward()"
+            >
+                סיטואציה הבאה ⬅️
+            </button>
 
-        <button onclick="resetGame()"
-                style="background: transparent; color: #ccc; font-size: 12px; box-shadow: none; text-decoration: underline; width: auto; margin-top: 20px;">
-            איפוס משחק
-        </button>
-    </div>
-</div>
 
-<!-- Screen 7: Final Podium -->
-<div id="podium-screen" class="container host-container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
-    </div>
+            <button
+                id="finishBtn"
+                style="
+                    display:none;
+                    max-width:350px;
+                "
+                onclick="updateGameStep(11)"
+            >
+                סיום וחשיפת המנצחים! 🏆
+            </button>
 
-    <h1>יש לנו מנצחים! 🏆</h1>
 
-    <div class="podium-box" id="podium-items"></div>
+            <button
+                onclick="resetGame()"
+                style="
+                    background:transparent;
+                    color:#aaa;
+                    font-size:14px;
+                    box-shadow:none;
+                    text-decoration:underline;
+                    width:auto;
+                    margin-top:20px;
+                "
+            >
+                איפוס משחק
+            </button>
 
-    <div id="final-blessing"
-         style="margin-top: 50px; font-size: 24px; color: var(--gold); font-weight: bold;">
-        בנימין ויונינה, שתזכו לבנות בית נאמן בישראל! 💍✨
-    </div>
+        </div>
 
-    <div style="display: flex; gap: 15px; justify-content: center; margin-top: 30px;">
-        <button onclick="resetGame"
-                style="max-width: 200px; background: #e57373;"
-                onclick="resetGame()">
-            איפוס משחק מלא 🔄
-        </button>
-
-        <button onclick="location.reload()"
-                style="max-width: 200px; background: #444;">
-            חזרה להתחלה
-        </button>
-    </div>
-</div>
-
-<!-- Screen 8: Player Final -->
-<div id="player-final-screen" class="container screen">
-    <div class="back-wrap">
-        <button class="back-btn" onclick="goBackToRole()">↩ חזרה</button>
     </div>
 
-    <h1 id="final-title">הגענו לחופה! 💒</h1>
 
-    <span id="final-rank-icon" class="final-rank-tag">✨</span>
+    <!-- =====================================================
+         SCREEN 7 - PODIUM
+    ====================================================== -->
 
-    <p id="final-message" class="final-reinforcement"></p>
+    <div
+        id="podium-screen"
+        class="container host-container screen"
+    >
 
-    <div style="font-size: 60px; margin: 20px 0;">💍</div>
+        <div class="back-wrap">
 
-    <h2 style="color: var(--gold);">תודה ששמחתם איתנו!</h2>
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
 
-    <p style="color: #777;">
-        מאחלים המון מזל טוב לבנימין ויונינה ❤️
-    </p>
-</div>
+        </div>
+
+
+        <h1
+            style="
+                font-size:3rem;
+            "
+        >
+            יש לנו מנצחים! 🏆
+        </h1>
+
+
+        <div
+            class="podium-box"
+            id="podium-items"
+        ></div>
+
+
+        <div
+            id="final-blessing"
+            style="
+                margin-top:50px;
+                font-size:28px;
+                color:var(--gold);
+                font-weight:bold;
+            "
+        >
+            בנימין ויונינה,
+            שתזכו לבנות בית נאמן בישראל!
+            💍✨
+        </div>
+
+
+        <div
+            style="
+                display:flex;
+                gap:15px;
+                justify-content:center;
+                margin-top:30px;
+                flex-wrap:wrap;
+            "
+        >
+
+            <button
+                onclick="resetGame()"
+                style="
+                    max-width:250px;
+                    background:#e57373;
+                "
+            >
+                איפוס משחק מלא 🔄
+            </button>
+
+
+            <button
+                onclick="location.reload()"
+                style="
+                    max-width:250px;
+                    background:#444;
+                "
+            >
+                חזרה להתחלה
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCREEN 8 - PLAYER FINAL
+    ====================================================== -->
+
+    <div
+        id="player-final-screen"
+        class="container screen"
+    >
+
+        <div class="back-wrap">
+
+            <button
+                class="back-btn"
+                onclick="goBackToRole()"
+            >
+                ↩ חזרה
+            </button>
+
+        </div>
+
+
+        <h1
+            id="final-title"
+            style="
+                font-size:3rem;
+            "
+        >
+            הגענו לחופה! 💒
+        </h1>
+
+
+        <span
+            id="final-rank-icon"
+            class="final-rank-tag"
+        >
+            ✨
+        </span>
+
+
+        <p
+            id="final-message"
+            class="final-reinforcement"
+        ></p>
+
+
+        <div
+            style="
+                font-size:60px;
+                margin:20px 0;
+            "
+        >
+            💍
+        </div>
+
+
+        <h2
+            style="
+                color:var(--gold);
+                font-size:28px;
+            "
+        >
+            תודה ששמחתם איתנו!
+        </h2>
+
+
+        <p
+            style="
+                color:#777;
+                font-size:20px;
+            "
+        >
+            מאחלים המון מזל טוב
+            לבנימין ויונינה ❤️
+        </p>
+
+    </div>
+
 
 <script>
 
-/* ====== CONFIG ====== */
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD2uL7Ql7_cmh3kMWQh_nLcJ2sg9gLUjbQ",
-    authDomain: "weddinggame-179d5.firebaseapp.com",
-    projectId: "weddinggame-179d5",
-    storageBucket: "weddinggame-179d5.firebasestorage.app",
-    messagingSenderId: "812758178545",
-    appId: "1:812758178545:web:f882b3ef22893e7ab5e750",
-    measurementId: "G-CBYZS3L2J2"
+
+    apiKey:
+        "AIzaSyBNzf0C85m9Dq1MwrGATzH-vQTkdqTKCyO",
+
+    authDomain:
+        "binyoninawedding2026.firebaseapp.com",
+
+    projectId:
+        "binyoninawedding2026",
+
+    storageBucket:
+        "binyoninawedding2026.firebasestorage.app",
+
+    messagingSenderId:
+        "731444947601",
+
+    appId:
+        "1:731444947601:web:4288385fa154398ff46d30",
+
+    measurementId:
+        "G-X15BS09GXE"
 };
+
+
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
 
 firebase.initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
-const auth = firebase.auth();
+const db =
+    firebase.firestore();
 
-const appId = "benjamin-yonina-wedding-vFINAL-LIVE";
+const auth =
+    firebase.auth();
+
+
+/* =========================================================
+   GAME DATABASE PATH
+========================================================= */
+
+const appId =
+    "benjamin-yonina-wedding-2026";
 
 const configPath =
     `artifacts/${appId}/public/data/config/gameStatus`;
@@ -828,117 +1883,206 @@ const partsPath =
     `artifacts/${appId}/public/data/participants`;
 
 
-/* ====== DATA (11 SITUATIONS) ====== */
+/* =========================================================
+   QUESTIONS
+========================================================= */
 
 const questions = [
 
     {
-        q: "לילה מאוחר. אחד רוצה מזגן ממש קר, והשני כבר עטוף בשמיכה. מה הפשרה?",
+        q:
+            "לילה מאוחר. אחד רוצה מזגן ממש קר, והשני כבר עטוף בשמיכה. מה הפשרה?",
+
         options: [
+
             "מכוונים טמפרטורה באמצע ומתחבאים כל אחד מתחת לשמיכה שלו.",
+
             "אחד ישן עם שמיכה, השני עם מאוורר קטן.",
+
             "מחליפים צדדים במיטה כל שעה כדי למצוא את הטמפרטורה המושלמת.",
+
             "פותחים חלון, מפעילים מאוורר ומכריזים שזה פתרון של שלום בית."
+
         ]
     },
 
+
     {
-        q: "השעה 12 בלילה ויש משהו קטן בבית שמציק לשניהם. מה קורה?",
+        q:
+            "השעה 12 בלילה ויש משהו קטן בבית שמציק לשניהם. מה קורה?",
+
         options: [
+
             "בנימין אומר: \"מחר נטפל בזה\".",
+
             "יונינה אומרת: \"זה לא דחוף, אפשר לחיות עם זה\".",
+
             "שניהם מנהלים דיון של עשר דקות מי בכלל הבחין בזה ראשון.",
+
             "מישהו כבר קם לטפל בזה והשני עוקב מהצד ונותן עצות."
+
         ]
     },
 
+
     {
-        q: "יצאתם לטיול \"קליל\". אחרי שעה מתברר שהוא קצת פחות קליל ממה שנאמר בהתחלה. מה קורה?",
+        q:
+            "יצאתם לטיול \"קליל\". אחרי שעה מתברר שהוא קצת פחות קליל ממה שנאמר בהתחלה. מה קורה?",
+
         options: [
+
             "ממשיכים באווירה טובה כאילו הכול לפי התוכנית.",
+
             "עוצרים להפסקה, מים ונשימה עמוקה.",
+
             "מתחילים להתבדח על מי אמר שזה מסלול קצר.",
+
             "פותחים מפה ומתחילים לנהל משא ומתן על קיצור המסלול."
+
         ]
     },
 
+
     {
-        q: "מוצאי שבת. שניהם רוצים קפה ועוגה, אבל לאף אחד אין כוח לקום למטבח.",
+        q:
+            "מוצאי שבת. שניהם רוצים קפה ועוגה, אבל לאף אחד אין כוח לקום למטבח.",
+
         options: [
+
             "אבן־נייר־ומספריים – המפסיד קם.",
+
             "אחד מכין קפה והשני מסדר משהו מתוק.",
+
             "מתחילים לדבר על זה... ובסוף נרדמים.",
+
             "מישהו קם ואומר: \"עזבו, אני כבר אכין\"."
+
         ]
     },
 
+
     {
-        q: "הגיעו אורחים, ובדיוק נשארה משימה קטנה לסדר לפני הדלת. איך זה נראה?",
+        q:
+            "הגיעו אורחים, ובדיוק נשארה משימה קטנה לסדר לפני הדלת. איך זה נראה?",
+
         options: [
+
             "אחד מתחיל לסדר והשני מצטרף מיד.",
+
             "אחד אומר \"אני על זה\" ונעלם לעשר דקות.",
+
             "שניהם מסדרים תוך כדי צחוקים ולחץ.",
+
             "מחליטים שהכול כבר מספיק טוב כמו שזה."
+
         ]
     },
 
+
     {
-        q: "חוזרים מהקניות עם המון שקיות. איך מעבירים הכול מהרכב?",
+        q:
+            "חוזרים מהקניות עם המון שקיות. איך מעבירים הכול מהרכב?",
+
         options: [
+
             "לוקחים הכול בפעם אחת כדי לחסוך סיבוב.",
+
             "מחלקים ביניהם את השקיות בצורה מסודרת.",
+
             "מביאים קודם את הדברים שצריכים קירור.",
+
             "משאירים כמה שקיות ברכב ל\"סיבוב הבא\"."
+
         ]
     },
 
+
     {
-        q: "יש אירוע חשוב בבוקר מוקדם. בערב שלפני, איך מתכוננים?",
+        q:
+            "יש אירוע חשוב בבוקר מוקדם. בערב שלפני, איך מתכוננים?",
+
         options: [
+
             "אחד מכין הכול מראש והשני זורם.",
+
             "שניהם בודקים שלוש פעמים את השעה והכתובת.",
+
             "מחליטים לקום מוקדם ומקווים לטוב.",
+
             "מתחילים את הבוקר רגוע ומאמינים שהכול יסתדר."
+
         ]
     },
 
+
     {
-        q: "יום עמוס, הבית מבולגן והכיור מלא. מה תהיה האסטרטגיה?",
+        q:
+            "יום עמוס, הבית מבולגן והכיור מלא. מה תהיה האסטרטגיה?",
+
         options: [
+
             "מחלקים ביניהם משימות וגומרים מהר.",
+
             "מסדרים קודם את מה שהכי מפריע.",
+
             "דוחים בחוכמה את המשימה לשעה נוחה יותר.",
+
             "מחליטים שהיום הזה לא נועד לניקיון."
+
         ]
     },
 
+
     {
-        q: "אורזים לחופשה הראשונה יחד. אחד אורז מעט, השני בטוח שצריך \"לכל מקרה\". מה קורה?",
+        q:
+            "אורזים לחופשה הראשונה יחד. אחד אורז מעט, השני בטוח שצריך \"לכל מקרה\". מה קורה?",
+
         options: [
+
             "עושים רשימה ומשווים כמויות.",
+
             "אחד מתחיל להוציא דברים מהמזוודה של השני.",
+
             "מוסיפים עוד תיק \"רק ליתר ביטחון\".",
+
             "מגיעים לשדה ומקווים שהכול יסתדר."
+
         ]
     },
 
+
     {
-        q: "יום שישי. הזמן רץ, יש כמה דברים אחרונים וכולם רוצים להספיק הכול. איך זה נראה?",
+        q:
+            "יום שישי. הזמן רץ, יש כמה דברים אחרונים וכולם רוצים להספיק הכול. איך זה נראה?",
+
         options: [
+
             "אחד עובר למצב טורבו והשני דואג שהכול יתקתק.",
+
             "מחלקים משימות ומתקדמים מהר.",
+
             "צוחקים על הלחץ ומחליטים שלא צריך להספיק הכול.",
+
             "מישהו כבר מוכן והשני עדיין מחפש איפה הניח משהו."
+
         ]
     },
 
+
     {
-        q: "בוחרים משהו גדול לבית החדש. לכל אחד יש העדפה אחרת. מה הפשרה?",
+        q:
+            "בוחרים משהו גדול לבית החדש. לכל אחד יש העדפה אחרת. מה הפשרה?",
+
         options: [
+
             "מוצאים אפשרות ששניהם אוהבים.",
+
             "אחד בוחר הפעם והשני בפעם הבאה.",
+
             "בוחרים לפי מה שהכי פרקטי לשניהם.",
+
             "יושבים לעוד סבב של דיון עד שמוצאים פתרון."
+
         ]
     }
 
@@ -946,708 +2090,275 @@ const questions = [
 
 
 const avatars = [
-    "🤵‍♂️", "👰‍♀️", "🧔‍♂️", "👵", "👴", "👶",
-    "💃", "🕺", "💑", "💏", "💍", "🕍",
-    "🍷", "🥂", "🍰", "🥨", "🍕", "🍔",
-    "🍦", "🍭", "🍩", "🍫", "🍿", "🍪",
-    "🍎", "🥑", "🥐", "🥳", "😎", "😂",
-    "😇", "🧿", "🎸", "🎷", "🎹", "🎤",
-    "🎻", "👞", "👠", "👒", "👑",
-    "🐶", "🐱", "🐰", "🦊", "🦁", "🐧",
-    "🦄", "🌈", "🔥", "✨", "❤️", "✡️"
+
+    "🤵‍♂️",
+    "👰‍♀️",
+    "🧔‍♂️",
+    "👵",
+    "👴",
+    "👶",
+
+    "💃",
+    "🕺",
+    "💑",
+    "💏",
+    "💍",
+    "🕍",
+
+    "🍷",
+    "🥂",
+    "🍰",
+    "🥨",
+    "🍕",
+    "🍔",
+
+    "🍦",
+    "🍭",
+    "🍩",
+    "🍫",
+    "🍿",
+    "🍪",
+
+    "🍎",
+    "🥑",
+    "🥐",
+
+    "🥳",
+    "😎",
+    "😂",
+    "😇",
+    "🧿",
+
+    "🎸",
+    "🎷",
+    "🎹",
+    "🎤",
+    "🎻",
+
+    "👞",
+    "👠",
+    "👒",
+    "👑",
+
+    "🐶",
+    "🐱",
+    "🐰",
+    "🦊",
+    "🦁",
+    "🐧",
+    "🦄",
+
+    "🌈",
+    "🔥",
+    "✨",
+    "❤️",
+    "✡️"
+
 ];
 
 
 let myState = {
-    role: '',
-    name: '',
-    avatar: '',
-    uid: '',
+
+    role: "",
+
+    name: "",
+
+    avatar: "",
+
+    uid: "",
+
     score: 0
+
 };
 
 
-/* ====== CORE LOGIC ====== */
+/* =========================================================
+   SCREEN NAVIGATION
+========================================================= */
+
+function showScreen(id) {
+
+    document
+        .querySelectorAll(".screen")
+        .forEach(
+            screen =>
+                screen.classList.remove("active")
+        );
+
+
+    const el =
+        document.getElementById(id);
+
+
+    if (el) {
+
+        el.classList.add("active");
+
+    }
+
+}
+
+
+/*
+   חוזרים למסך הראשון.
+   Reload עוצר listeners פעילים
+   בלי למחוק נתוני משחק מ-Firestore.
+*/
+
+function goBackToRole() {
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   TOAST MESSAGE
+========================================================= */
+
+function toast(
+    text,
+    color = "var(--gold)"
+) {
+
+    const msg =
+        document.getElementById("msg");
+
+
+    msg.innerText =
+        text;
+
+
+    msg.style.backgroundColor =
+        color;
+
+
+    msg.style.display =
+        "block";
+
+
+    setTimeout(
+        () => {
+
+            msg.style.display =
+                "none";
+
+        },
+        3500
+    );
+
+}
+
+
+/* =========================================================
+   START APP
+========================================================= */
 
 async function initApp(role) {
 
-    myState.role = role;
+    myState.role =
+        role;
+
 
     try {
 
         await auth.signInAnonymously();
 
-        myState.uid = auth.currentUser.uid;
 
-        if (role === 'host') {
+        if (!auth.currentUser) {
+
+            throw new Error(
+                "Firebase anonymous authentication failed."
+            );
+
+        }
+
+
+        myState.uid =
+            auth.currentUser.uid;
+
+
+        if (role === "host") {
+
             setupHost();
+
         }
 
-        else if (role === 'couple') {
+
+        else if (role === "couple") {
+
             setupCouple();
+
         }
 
+
         else {
+
             setupPlayerSetup();
+
         }
 
     }
 
-    catch (e) {
-        toast("שגיאת חיבור", "var(--error)");
-    }
-}
 
+    catch (error) {
 
-function showScreen(id) {
-
-    document
-        .querySelectorAll('.screen')
-        .forEach(s => s.classList.remove('active'));
-
-    const el = document.getElementById(id);
-
-    if (el) {
-        el.classList.add('active');
-    }
-}
-
-
-/* Return to role-selection without deleting the game data. */
-
-function goBackToRole() {
-
-    showScreen('role-selection');
-
-}
-
-
-function toast(text, color = 'var(--gold)') {
-
-    const m = document.getElementById('msg');
-
-    m.innerText = text;
-    m.style.backgroundColor = color;
-    m.style.display = 'block';
-
-    setTimeout(() => {
-        m.style.display = 'none';
-    }, 3000);
-}
-
-
-/* ====== PLAYER REG ====== */
-
-function setupPlayerSetup() {
-
-    const aL = document.getElementById('avatarList');
-
-    aL.innerHTML = "";
-
-    avatars.forEach(av => {
-
-        const div = document.createElement('div');
-
-        div.className = "avatar-opt";
-        div.innerText = av;
-
-        div.onclick = () => {
-
-            myState.avatar = av;
-
-            document
-                .querySelectorAll('.avatar-opt')
-                .forEach(x => x.classList.remove('selected'));
-
-            div.classList.add('selected');
-
-        };
-
-        aL.appendChild(div);
-
-    });
-
-    showScreen('player-setup');
-}
-
-
-async function joinGame() {
-
-    myState.name =
-        document.getElementById('playerName').value.trim();
-
-    if (!myState.name) {
-        return toast("נא להזין שם", "var(--error)");
-    }
-
-    if (!myState.avatar) {
-        return toast("נא לבחור אימוג'י", "var(--error)");
-    }
-
-    await db
-        .doc(`${partsPath}/${myState.uid}`)
-        .set({
-            name: myState.name,
-            avatar: myState.avatar,
-            score: 0,
-            lastStep: -1,
-            choice: null
-        });
-
-    document.getElementById('my-id-label').innerText =
-        `${myState.avatar} ${myState.name}`;
-
-    showScreen('waiting-room');
-
-    listenForGame();
-}
-
-
-function listenForGame() {
-
-    db.doc(configPath).onSnapshot(doc => {
-
-        const data = doc.data();
-
-        if (!data || data.step === -1) {
-
-            showScreen('waiting-room');
-
-        }
-
-        else if (data.step < 11) {
-
-            renderPlayerQ(
-                data.step,
-                data.correctAns
-            );
-
-        }
-
-        else {
-
-            finalizePlayer();
-
-        }
-
-    });
-
-}
-
-
-async function finalizePlayer() {
-
-    const snap =
-        await db.collection(partsPath).get();
-
-    const sorted =
-        snap.docs
-            .map(d => d.data())
-            .sort((a,b) => b.score - a.score);
-
-    const myRank =
-        sorted.findIndex(
-            p =>
-                p.name === myState.name &&
-                p.avatar === myState.avatar
-        ) + 1;
-
-    const icon =
-        document.getElementById('final-rank-icon');
-
-    const msg =
-        document.getElementById('final-message');
-
-    if (myRank === 1) {
-
-        icon.innerText = "🏆";
-
-        msg.innerText =
-            "מקום ראשון! אתם מכירים את בנימין ויונינה הכי טוב באולם! 🥇✨";
-
-    }
-
-    else if (myRank === 2) {
-
-        icon.innerText = "🥈";
-
-        msg.innerText =
-            "מקום שני! כמעט הגעתם לחופה ראשונים, כל הכבוד! 🥈";
-
-    }
-
-    else if (myRank === 3) {
-
-        icon.innerText = "🥉";
-
-        msg.innerText =
-            "מקום שלישי! איזה יופי של היכרות עם הזוג! 🥉";
-
-    }
-
-    else {
-
-        icon.innerText = "✨";
-
-        msg.innerText =
-            "תודה שהשתתפתם במסע שלנו לחופה! שמחנו שחלקתם איתנו את הרגע.";
-
-    }
-
-    showScreen('player-final-screen');
-}
-
-
-function renderPlayerQ(step, correct) {
-
-    const q = questions[step];
-
-    document.getElementById('p-q-num').innerText =
-        `סיטואציה ${step + 1} מתוך 11`;
-
-    const qT =
-        document.getElementById('q-text');
-
-    const qO =
-        document.getElementById('q-options');
-
-    const pS =
-        document.getElementById('p-status-box');
-
-    const pST =
-        document.getElementById('p-status');
-
-
-    db
-        .doc(`${partsPath}/${myState.uid}`)
-        .get()
-        .then(pDoc => {
-
-            const pD = pDoc.data();
-
-            qT.innerText = q.q;
-            qO.innerHTML = "";
-
-            showScreen('player-game');
-
-            const voted =
-                pD.lastStep === step &&
-                pD.choice !== null;
-
-
-            if (voted) {
-
-                pS.style.display = "block";
-
-                if (correct !== null) {
-
-                    const right =
-                        pD.choice === correct;
-
-                    pS.style.background =
-                        right
-                            ? "#e8f5e9"
-                            : "#fbe9e7";
-
-                    pST.innerText =
-                        right
-                            ? "צדקתם! ✨"
-                            : "אופס, הזוג בחר אחרת...";
-
-                    pST.style.color =
-                        right
-                            ? "var(--success)"
-                            : "var(--error)";
-
-                }
-
-                else {
-
-                    pS.style.background = "#fff8e1";
-
-                    pST.innerText =
-                        "ההימור נשלח! מחכים לראות מה הזוג יבחר...";
-
-                }
-
-            }
-
-            else {
-
-                pS.style.display = "none";
-
-            }
-
-
-            q.options.forEach((opt, i) => {
-
-                const b =
-                    document.createElement('button');
-
-                b.className =
-                    `game-opt-btn ${
-                        voted && pD.choice === i
-                            ? 'selected'
-                            : ''
-                    }`;
-
-                b.innerText = opt;
-
-                b.disabled = voted;
-
-                b.onclick = async () => {
-
-                    await db
-                        .doc(`${partsPath}/${myState.uid}`)
-                        .update({
-                            choice: i,
-                            lastStep: step
-                        });
-
-                    renderPlayerQ(
-                        step,
-                        correct
-                    );
-
-                };
-
-                qO.appendChild(b);
-
-            });
-
-        });
-
-}
-
-
-/* ====== HOST LOGIC ====== */
-
-function setupHost() {
-
-    showScreen('main-board-view');
-
-    db.doc(configPath).onSnapshot(doc => {
-
-        const data =
-            doc.data() || {
-                step: -1,
-                correctAns: null
-            };
-
-        const hDesc =
-            document.getElementById('host-q-desc');
-
-        const hCount =
-            document.getElementById('h-q-num');
-
-        const sBtn =
-            document.getElementById('startBtn');
-
-        const nBtn =
-            document.getElementById('nextBtn');
-
-        const fBtn =
-            document.getElementById('finishBtn');
-
-
-        if (data.step === -1) {
-
-            hDesc.innerText =
-                "הצטרפו למשחק! הזינו שם ובחרו דמות...";
-
-            hCount.innerText = "";
-
-            sBtn.style.display = "block";
-            nBtn.style.display = "none";
-            fBtn.style.display = "none";
-
-        }
-
-        else if (data.step < 11) {
-
-            sBtn.style.display = "none";
-
-            const answered =
-                data.correctAns !== null;
-
-            nBtn.style.display =
-                (answered && data.step < 10)
-                    ? "block"
-                    : "none";
-
-            fBtn.style.display =
-                (answered && data.step === 10)
-                    ? "block"
-                    : "none";
-
-            hCount.innerText =
-                `שאלה ${data.step + 1} מתוך 11`;
-
-            hDesc.innerText =
-                questions[data.step].q;
-
-            document
-                .getElementById('leaderboard-box')
-                .style.display =
-                    answered
-                        ? "block"
-                        : "none";
-
-        }
-
-        else {
-
-            showPodium();
-
-        }
-
-    });
-
-
-    /* Live Listener */
-
-    db
-        .collection(partsPath)
-        .onSnapshot(snap => {
-
-            const parts =
-                snap.docs.map(d => d.data());
-
-            renderLanes(parts);
-            renderLeaderboard(parts);
-
-        });
-
-}
-
-
-function renderLanes(parts) {
-
-    const container =
-        document.getElementById('lanes-container');
-
-    container.innerHTML = "";
-
-    parts.forEach(p => {
-
-        const lane =
-            document.createElement('div');
-
-        lane.className = "p-lane";
-
-        const progress =
-            (p.score / 11) * 100;
-
-        lane.innerHTML = `
-            <div class="p-avatar-box"
-                 style="right: ${progress}%">
-
-                <div class="avatar-circle">
-                    ${p.avatar || '👤'}
-                </div>
-
-                <div class="p-name-tag">
-                    ${p.name}
-                </div>
-
-            </div>
-        `;
-
-        container.appendChild(lane);
-
-    });
-
-}
-
-
-function renderLeaderboard(parts) {
-
-    const sorted =
-        [...parts]
-            .sort((a,b) => b.score - a.score)
-            .slice(0, 5);
-
-    const body =
-        document.getElementById('lb-body');
-
-    body.innerHTML = "";
-
-    sorted.forEach((p, i) => {
-
-        const row =
-            document.createElement('tr');
-
-        row.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${p.name}</td>
-            <td>${p.score} צעדים</td>
-        `;
-
-        body.appendChild(row);
-
-    });
-
-}
-
-
-async function showPodium() {
-
-    showScreen('podium-screen');
-
-    startFireworks();
-
-    const snap =
-        await db.collection(partsPath).get();
-
-    const sorted =
-        snap.docs
-            .map(d => d.data())
-            .sort((a,b) => b.score - a.score);
-
-    const display =
-        document.getElementById('podium-items');
-
-    display.innerHTML = "";
-
-    const layout = [
-
-        {
-            data: sorted[1],
-            rank: 2,
-            class: 'silver-step'
-        },
-
-        {
-            data: sorted[0],
-            rank: 1,
-            class: 'gold-step'
-        },
-
-        {
-            data: sorted[2],
-            rank: 3,
-            class: 'bronze-step'
-        }
-
-    ];
-
-
-    layout.forEach(pos => {
-
-        if (pos.data) {
-
-            const step =
-                document.createElement('div');
-
-            step.className =
-                "podium-step";
-
-            step.innerHTML = `
-                <div class="winner-data">
-
-                    <div class="winner-av">
-                        ${pos.data.avatar}
-                    </div>
-
-                    <div class="winner-nm">
-                        ${pos.data.name}
-                    </div>
-
-                </div>
-
-                <div class="step-base ${pos.class}">
-                    ${pos.rank}
-                </div>
-            `;
-
-            display.appendChild(step);
-
-        }
-
-    });
-
-}
-
-
-async function updateGameStep(s) {
-
-    await db
-        .doc(configPath)
-        .set(
-            {
-                step: s,
-                correctAns: null
-            },
-            {
-                merge: true
-            }
+        console.error(
+            "Firebase startup error:",
+            error
         );
 
-}
+
+        let message =
+            "שגיאת חיבור. בדקו שהחיבור לאינטרנט פעיל.";
 
 
-function stepForward() {
+        if (
+            error.code ===
+            "auth/operation-not-allowed"
+        ) {
 
-    db
-        .doc(configPath)
-        .get()
-        .then(doc => {
+            message =
+                "הכניסה האנונימית אינה מופעלת ב-Firebase.";
 
-            updateGameStep(
-                doc.data().step + 1
-            );
-
-        });
-
-}
+        }
 
 
-/* Full Reset Function */
+        else if (
+            error.code ===
+            "auth/unauthorized-domain"
+        ) {
 
-async function resetGame() {
+            message =
+                "הדומיין של האתר אינו מורשה ב-Firebase.";
 
-    const confirmReset =
-        confirm(
-            "האם אתם בטוחים שברצונכם לאפס את המשחק ולמחוק את כל המשתתפים?"
-        );
-
-    if (!confirmReset) {
-        return;
-    }
+        }
 
 
-    try {
+        else if (
+            error.code ===
+            "auth/invalid-api-key"
+        ) {
 
-        await updateGameStep(-1);
+            message =
+                "מפתח Firebase אינו תקין.";
 
-        const snap =
-            await db.collection(partsPath).get();
+        }
 
-        const batch =
-            db.batch();
 
-        snap.docs.forEach(d => {
+        else if (
+            error.code ===
+            "permission-denied"
+        ) {
 
-            batch.delete(d.ref);
+            message =
+                "אין הרשאה למסד הנתונים של המשחק.";
 
-        });
+        }
 
-        await batch.commit();
-
-        toast("המשחק אופס בהצלחה!");
-
-        setTimeout(() => {
-            location.reload();
-        }, 1000);
-
-    }
-
-    catch (e) {
-
-        console.error(e);
 
         toast(
-            "שגיאה באיפוס",
+            message,
             "var(--error)"
         );
 
@@ -1656,194 +2367,1613 @@ async function resetGame() {
 }
 
 
-/* ====== COUPLE LOGIC ====== */
+/* =========================================================
+   PLAYER SETUP
+========================================================= */
 
-function setupCouple() {
+function setupPlayerSetup() {
 
-    showScreen('couple-game');
-
-    db.doc(configPath).onSnapshot(doc => {
-
-        const data =
-            doc.data() || {
-                step: -1,
-                correctAns: null
-            };
-
-        const qText =
-            document.getElementById('couple-q-text');
-
-        const counter =
-            document.getElementById('c-q-num');
-
-        const optDiv =
-            document.getElementById('couple-options');
-
-        const wait =
-            document.getElementById('couple-waiting');
+    const avatarList =
+        document.getElementById(
+            "avatarList"
+        );
 
 
-        if (
-            data.step === -1 ||
-            data.step >= 11
-        ) {
-
-            qText.innerText =
-                "המתינו למנחה...";
-
-            counter.innerText = "";
-
-            optDiv.innerHTML = "";
-
-            wait.style.display = "none";
-
-        }
-
-        else {
-
-            if (data.correctAns !== null) {
-
-                qText.innerText =
-                    "נשלח! ✨";
-
-                optDiv.innerHTML = "";
-
-                wait.style.display =
-                    "block";
-
-            }
-
-            else {
-
-                counter.innerText =
-                    `שאלה ${data.step + 1} מתוך 11`;
-
-                qText.innerText =
-                    questions[data.step].q;
-
-                wait.style.display = "none";
-
-                optDiv.innerHTML = "";
+    avatarList.innerHTML =
+        "";
 
 
-                questions[data.step].options.forEach((o, i) => {
+    avatars.forEach(
+        avatar => {
 
-                    const b =
-                        document.createElement('button');
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-                    b.className =
-                        "couple-select-btn";
 
-                    b.innerText = o;
+            div.className =
+                "avatar-opt";
 
-                    b.style.width = "100%";
-                    b.style.margin = "10px 0";
-                    b.style.padding = "15px";
-                    b.style.borderRadius = "15px";
-                    b.style.color = "white";
-                    b.style.border = "none";
-                    b.style.fontWeight = "bold";
-                    b.style.fontSize = "16px";
 
-                    b.onclick = () => {
-                        submitAns(
-                            i,
-                            data.step
+            div.innerText =
+                avatar;
+
+
+            div.onclick =
+                () => {
+
+                    myState.avatar =
+                        avatar;
+
+
+                    document
+                        .querySelectorAll(
+                            ".avatar-opt"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList
+                                    .remove(
+                                        "selected"
+                                    )
                         );
-                    };
 
-                    optDiv.appendChild(b);
 
-                });
+                    div.classList.add(
+                        "selected"
+                    );
 
-            }
+                };
+
+
+            avatarList.appendChild(
+                div
+            );
 
         }
+    );
 
-    });
+
+    showScreen(
+        "player-setup"
+    );
 
 }
 
 
-async function submitAns(idx, step) {
+/* =========================================================
+   JOIN GAME
+========================================================= */
 
-    const snap =
-        await db.collection(partsPath).get();
+async function joinGame() {
 
-    const batch =
-        db.batch();
+    myState.name =
+        document
+            .getElementById(
+                "playerName"
+            )
+            .value
+            .trim();
 
-    snap.docs.forEach(d => {
 
-        const p = d.data();
+    if (!myState.name) {
 
-        if (
-            p.lastStep === step &&
-            p.choice === idx
-        ) {
+        return toast(
+            "נא להזין שם",
+            "var(--error)"
+        );
 
-            batch.update(
-                d.ref,
-                {
-                    score:
-                        (p.score || 0) + 1
+    }
+
+
+    if (!myState.avatar) {
+
+        return toast(
+            "נא לבחור אימוג'י",
+            "var(--error)"
+        );
+
+    }
+
+
+    try {
+
+        await db
+            .doc(
+                `${partsPath}/${myState.uid}`
+            )
+            .set({
+
+                name:
+                    myState.name,
+
+                avatar:
+                    myState.avatar,
+
+                score:
+                    0,
+
+                lastStep:
+                    -1,
+
+                choice:
+                    null
+
+            });
+
+
+        document
+            .getElementById(
+                "my-id-label"
+            )
+            .innerText =
+            `${myState.avatar} ${myState.name}`;
+
+
+        showScreen(
+            "waiting-room"
+        );
+
+
+        listenForGame();
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+
+        toast(
+            "לא ניתן להצטרף למשחק. בדקו את הרשאות Firestore.",
+            "var(--error)"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PLAYER GAME LISTENER
+========================================================= */
+
+function listenForGame() {
+
+    db
+        .doc(configPath)
+        .onSnapshot(
+
+            doc => {
+
+                const data =
+                    doc.data();
+
+
+                if (
+                    !data ||
+                    data.step === -1
+                ) {
+
+                    showScreen(
+                        "waiting-room"
+                    );
+
                 }
+
+
+                else if (
+                    data.step < 11
+                ) {
+
+                    renderPlayerQ(
+                        data.step,
+                        data.correctAns
+                    );
+
+                }
+
+
+                else {
+
+                    finalizePlayer();
+
+                }
+
+            },
+
+
+            error => {
+
+                console.error(
+                    "Player listener error:",
+                    error
+                );
+
+
+                toast(
+                    "לא ניתן לקרוא את מצב המשחק.",
+                    "var(--error)"
+                );
+
+            }
+
+        );
+
+}
+
+
+/* =========================================================
+   PLAYER QUESTION
+========================================================= */
+
+function renderPlayerQ(
+    step,
+    correct
+) {
+
+    const q =
+        questions[step];
+
+
+    document
+        .getElementById(
+            "p-q-num"
+        )
+        .innerText =
+        `סיטואציה ${step + 1} מתוך 11`;
+
+
+    const qText =
+        document.getElementById(
+            "q-text"
+        );
+
+
+    const qOptions =
+        document.getElementById(
+            "q-options"
+        );
+
+
+    const statusBox =
+        document.getElementById(
+            "p-status-box"
+        );
+
+
+    const statusText =
+        document.getElementById(
+            "p-status"
+        );
+
+
+    db
+        .doc(
+            `${partsPath}/${myState.uid}`
+        )
+        .get()
+        .then(
+            playerDoc => {
+
+                const player =
+                    playerDoc.data();
+
+
+                qText.innerText =
+                    q.q;
+
+
+                qOptions.innerHTML =
+                    "";
+
+
+                showScreen(
+                    "player-game"
+                );
+
+
+                const voted =
+                    player.lastStep === step &&
+                    player.choice !== null;
+
+
+                if (voted) {
+
+                    statusBox.style.display =
+                        "block";
+
+
+                    if (correct !== null) {
+
+                        const right =
+                            player.choice === correct;
+
+
+                        statusBox.style.background =
+                            right
+                                ? "#e8f5e9"
+                                : "#fbe9e7";
+
+
+                        statusText.innerText =
+                            right
+                                ? "צדקתם! ✨"
+                                : "אופס, הזוג בחר אחרת...";
+
+
+                        statusText.style.color =
+                            right
+                                ? "var(--success)"
+                                : "var(--error)";
+
+                    }
+
+
+                    else {
+
+                        statusBox.style.background =
+                            "#fff8e1";
+
+
+                        statusText.innerText =
+                            "ההימור נשלח! מחכים לראות מה הזוג יבחר...";
+
+                    }
+
+                }
+
+
+                else {
+
+                    statusBox.style.display =
+                        "none";
+
+                }
+
+
+                q.options.forEach(
+                    (option, index) => {
+
+                        const button =
+                            document.createElement(
+                                "button"
+                            );
+
+
+                        button.className =
+                            "game-opt-btn " +
+                            (
+                                voted &&
+                                player.choice === index
+                                    ? "selected"
+                                    : ""
+                            );
+
+
+                        button.innerText =
+                            option;
+
+
+                        button.disabled =
+                            voted;
+
+
+                        button.onclick =
+                            async () => {
+
+                                try {
+
+                                    await db
+                                        .doc(
+                                            `${partsPath}/${myState.uid}`
+                                        )
+                                        .update({
+
+                                            choice:
+                                                index,
+
+                                            lastStep:
+                                                step
+
+                                        });
+
+
+                                    renderPlayerQ(
+                                        step,
+                                        correct
+                                    );
+
+                                }
+
+                                catch (error) {
+
+                                    console.error(error);
+
+                                    toast(
+                                        "לא ניתן לשמור את הבחירה.",
+                                        "var(--error)"
+                                    );
+
+                                }
+
+                            };
+
+
+                        qOptions.appendChild(
+                            button
+                        );
+
+                    }
+                );
+
+            }
+        )
+
+        .catch(
+            error => {
+
+                console.error(error);
+
+                toast(
+                    "לא ניתן לקרוא את פרטי המשתתף.",
+                    "var(--error)"
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   PLAYER FINAL
+========================================================= */
+
+async function finalizePlayer() {
+
+    try {
+
+        const snap =
+            await db
+                .collection(partsPath)
+                .get();
+
+
+        const sorted =
+            snap.docs
+                .map(
+                    doc => doc.data()
+                )
+                .sort(
+                    (a,b) =>
+                        b.score - a.score
+                );
+
+
+        const myRank =
+            sorted.findIndex(
+                player =>
+                    player.name ===
+                        myState.name &&
+                    player.avatar ===
+                        myState.avatar
+            ) + 1;
+
+
+        const icon =
+            document.getElementById(
+                "final-rank-icon"
+            );
+
+
+        const message =
+            document.getElementById(
+                "final-message"
+            );
+
+
+        if (myRank === 1) {
+
+            icon.innerText =
+                "🏆";
+
+
+            message.innerText =
+                "מקום ראשון! אתם מכירים את בנימין ויונינה הכי טוב באולם! 🥇✨";
+
+        }
+
+
+        else if (myRank === 2) {
+
+            icon.innerText =
+                "🥈";
+
+
+            message.innerText =
+                "מקום שני! כמעט הגעתם לחופה ראשונים, כל הכבוד! 🥈";
+
+        }
+
+
+        else if (myRank === 3) {
+
+            icon.innerText =
+                "🥉";
+
+
+            message.innerText =
+                "מקום שלישי! איזה יופי של היכרות עם הזוג! 🥉";
+
+        }
+
+
+        else {
+
+            icon.innerText =
+                "✨";
+
+
+            message.innerText =
+                "תודה שהשתתפתם במסע שלנו לחופה! שמחנו שחלקתם איתנו את הרגע.";
+
+        }
+
+
+        showScreen(
+            "player-final-screen"
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        toast(
+            "לא ניתן לחשב את התוצאה.",
+            "var(--error)"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HOST
+========================================================= */
+
+function setupHost() {
+
+    showScreen(
+        "main-board-view"
+    );
+
+
+    db
+        .doc(configPath)
+        .onSnapshot(
+
+            doc => {
+
+                const data =
+                    doc.data() || {
+
+                        step: -1,
+
+                        correctAns:
+                            null
+
+                    };
+
+
+                const description =
+                    document.getElementById(
+                        "host-q-desc"
+                    );
+
+
+                const counter =
+                    document.getElementById(
+                        "h-q-num"
+                    );
+
+
+                const startButton =
+                    document.getElementById(
+                        "startBtn"
+                    );
+
+
+                const nextButton =
+                    document.getElementById(
+                        "nextBtn"
+                    );
+
+
+                const finishButton =
+                    document.getElementById(
+                        "finishBtn"
+                    );
+
+
+                if (
+                    data.step === -1
+                ) {
+
+                    description.innerText =
+                        "הצטרפו למשחק! הזינו שם ובחרו דמות...";
+
+
+                    counter.innerText =
+                        "";
+
+
+                    startButton.style.display =
+                        "block";
+
+
+                    nextButton.style.display =
+                        "none";
+
+
+                    finishButton.style.display =
+                        "none";
+
+                }
+
+
+                else if (
+                    data.step < 11
+                ) {
+
+                    startButton.style.display =
+                        "none";
+
+
+                    const answered =
+                        data.correctAns !== null;
+
+
+                    nextButton.style.display =
+                        (
+                            answered &&
+                            data.step < 10
+                        )
+                            ? "block"
+                            : "none";
+
+
+                    finishButton.style.display =
+                        (
+                            answered &&
+                            data.step === 10
+                        )
+                            ? "block"
+                            : "none";
+
+
+                    counter.innerText =
+                        `שאלה ${data.step + 1} מתוך 11`;
+
+
+                    description.innerText =
+                        questions[data.step].q;
+
+
+                    document
+                        .getElementById(
+                            "leaderboard-box"
+                        )
+                        .style.display =
+                            answered
+                                ? "block"
+                                : "none";
+
+                }
+
+
+                else {
+
+                    showPodium();
+
+                }
+
+            },
+
+
+            error => {
+
+                console.error(
+                    "Host listener error:",
+                    error
+                );
+
+
+                toast(
+                    "לא ניתן לקרוא את נתוני המשחק מ-Firebase.",
+                    "var(--error)"
+                );
+
+            }
+
+        );
+
+
+    db
+        .collection(partsPath)
+        .onSnapshot(
+
+            snapshot => {
+
+                const participants =
+                    snapshot.docs
+                        .map(
+                            doc => doc.data()
+                        );
+
+
+                renderLanes(
+                    participants
+                );
+
+
+                renderLeaderboard(
+                    participants
+                );
+
+            },
+
+
+            error => {
+
+                console.error(
+                    "Participants listener error:",
+                    error
+                );
+
+            }
+
+        );
+
+}
+
+
+/* =========================================================
+   HOST PARTICIPANT LANES
+========================================================= */
+
+function renderLanes(
+    participants
+) {
+
+    const container =
+        document.getElementById(
+            "lanes-container"
+        );
+
+
+    container.innerHTML =
+        "";
+
+
+    participants.forEach(
+        participant => {
+
+            const lane =
+                document.createElement(
+                    "div"
+                );
+
+
+            lane.className =
+                "p-lane";
+
+
+            const progress =
+                Math.min(
+                    100,
+                    (participant.score / 11) * 100
+                );
+
+
+            lane.innerHTML = `
+
+                <div
+                    class="p-avatar-box"
+                    style="right:${progress}%"
+                >
+
+                    <div class="avatar-circle">
+                        ${participant.avatar || "👤"}
+                    </div>
+
+
+                    <div class="p-name-tag">
+                        ${escapeHtml(participant.name || "")}
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                lane
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LEADERBOARD
+========================================================= */
+
+function renderLeaderboard(
+    participants
+) {
+
+    const sorted =
+        [...participants]
+            .sort(
+                (a,b) =>
+                    b.score - a.score
+            )
+            .slice(0,5);
+
+
+    const body =
+        document.getElementById(
+            "lb-body"
+        );
+
+
+    body.innerHTML =
+        "";
+
+
+    sorted.forEach(
+        (participant,index) => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML = `
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${escapeHtml(participant.name || "")}
+                </td>
+
+                <td>
+                    ${participant.score || 0}
+                    צעדים
+                </td>
+
+            `;
+
+
+            body.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PODIUM
+========================================================= */
+
+async function showPodium() {
+
+    showScreen(
+        "podium-screen"
+    );
+
+
+    startFireworks();
+
+
+    try {
+
+        const snapshot =
+            await db
+                .collection(partsPath)
+                .get();
+
+
+        const sorted =
+            snapshot.docs
+                .map(
+                    doc =>
+                        doc.data()
+                )
+                .sort(
+                    (a,b) =>
+                        b.score - a.score
+                );
+
+
+        const display =
+            document.getElementById(
+                "podium-items"
+            );
+
+
+        display.innerHTML =
+            "";
+
+
+        const layout = [
+
+            {
+                data:
+                    sorted[1],
+
+                rank:
+                    2,
+
+                class:
+                    "silver-step"
+            },
+
+
+            {
+                data:
+                    sorted[0],
+
+                rank:
+                    1,
+
+                class:
+                    "gold-step"
+            },
+
+
+            {
+                data:
+                    sorted[2],
+
+                rank:
+                    3,
+
+                class:
+                    "bronze-step"
+            }
+
+        ];
+
+
+        layout.forEach(
+            position => {
+
+                if (!position.data) {
+                    return;
+                }
+
+
+                const step =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                step.className =
+                    "podium-step";
+
+
+                step.innerHTML = `
+
+                    <div class="winner-data">
+
+                        <div class="winner-av">
+                            ${position.data.avatar || "👤"}
+                        </div>
+
+                        <div class="winner-nm">
+                            ${escapeHtml(position.data.name || "")}
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            step-base
+                            ${position.class}
+                        "
+                    >
+                        ${position.rank}
+                    </div>
+
+                `;
+
+
+                display.appendChild(
+                    step
+                );
+
+            }
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        toast(
+            "לא ניתן להציג את המנצחים.",
+            "var(--error)"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   GAME STEP
+========================================================= */
+
+async function updateGameStep(
+    step
+) {
+
+    try {
+
+        await db
+            .doc(configPath)
+            .set(
+
+                {
+                    step:
+                        step,
+
+                    correctAns:
+                        null
+
+                },
+
+                {
+                    merge:
+                        true
+                }
+
+            );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Game step error:",
+            error
+        );
+
+
+        toast(
+            "לא ניתן להתחיל את המשחק. בדקו את הרשאות Firebase.",
+            "var(--error)"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   NEXT QUESTION
+========================================================= */
+
+async function stepForward() {
+
+    try {
+
+        const doc =
+            await db
+                .doc(configPath)
+                .get();
+
+
+        const currentStep =
+            doc.exists &&
+            doc.data().step !== undefined
+                ? doc.data().step
+                : -1;
+
+
+        if (currentStep < 10) {
+
+            await updateGameStep(
+                currentStep + 1
             );
 
         }
 
-    });
+    }
 
-    await batch.commit();
 
-    await db
-        .doc(configPath)
-        .update({
-            correctAns: idx
-        });
+    catch (error) {
+
+        console.error(error);
+
+        toast(
+            "לא ניתן לעבור לשאלה הבאה.",
+            "var(--error)"
+        );
+
+    }
 
 }
 
 
-/* ====== FIREWORKS ====== */
+/* =========================================================
+   RESET GAME
+========================================================= */
+
+async function resetGame() {
+
+    const confirmed =
+        confirm(
+            "האם אתם בטוחים שברצונכם לאפס את המשחק ולמחוק את כל המשתתפים?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        await updateGameStep(
+            -1
+        );
+
+
+        const snapshot =
+            await db
+                .collection(partsPath)
+                .get();
+
+
+        const batch =
+            db.batch();
+
+
+        snapshot.docs.forEach(
+            doc => {
+
+                batch.delete(
+                    doc.ref
+                );
+
+            }
+        );
+
+
+        await batch.commit();
+
+
+        toast(
+            "המשחק אופס בהצלחה!"
+        );
+
+
+        setTimeout(
+            () => location.reload(),
+            1000
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+
+        toast(
+            "שגיאה באיפוס המשחק.",
+            "var(--error)"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   COUPLE
+========================================================= */
+
+function setupCouple() {
+
+    showScreen(
+        "couple-game"
+    );
+
+
+    db
+        .doc(configPath)
+        .onSnapshot(
+
+            doc => {
+
+                const data =
+                    doc.data() || {
+
+                        step:
+                            -1,
+
+                        correctAns:
+                            null
+
+                    };
+
+
+                const questionText =
+                    document.getElementById(
+                        "couple-q-text"
+                    );
+
+
+                const counter =
+                    document.getElementById(
+                        "c-q-num"
+                    );
+
+
+                const optionsDiv =
+                    document.getElementById(
+                        "couple-options"
+                    );
+
+
+                const waiting =
+                    document.getElementById(
+                        "couple-waiting"
+                    );
+
+
+                if (
+                    data.step === -1 ||
+                    data.step >= 11
+                ) {
+
+                    questionText.innerText =
+                        "המתינו למנחה...";
+
+
+                    counter.innerText =
+                        "";
+
+
+                    optionsDiv.innerHTML =
+                        "";
+
+
+                    waiting.style.display =
+                        "none";
+
+                }
+
+
+                else {
+
+                    if (
+                        data.correctAns !== null
+                    ) {
+
+                        questionText.innerText =
+                            "נשלח! ✨";
+
+
+                        optionsDiv.innerHTML =
+                            "";
+
+
+                        waiting.style.display =
+                            "block";
+
+                    }
+
+
+                    else {
+
+                        counter.innerText =
+                            `שאלה ${data.step + 1} מתוך 11`;
+
+
+                        questionText.innerText =
+                            questions[data.step].q;
+
+
+                        waiting.style.display =
+                            "none";
+
+
+                        optionsDiv.innerHTML =
+                            "";
+
+
+                        questions[data.step]
+                            .options
+                            .forEach(
+                                (option,index) => {
+
+                                    const button =
+                                        document.createElement(
+                                            "button"
+                                        );
+
+
+                                    button.className =
+                                        "couple-select-btn";
+
+
+                                    button.innerText =
+                                        option;
+
+
+                                    button.style.width =
+                                        "100%";
+
+
+                                    button.style.margin =
+                                        "10px 0";
+
+
+                                    button.style.padding =
+                                        "18px";
+
+
+                                    button.style.borderRadius =
+                                        "15px";
+
+
+                                    button.style.color =
+                                        "white";
+
+
+                                    button.style.border =
+                                        "none";
+
+
+                                    button.style.fontWeight =
+                                        "bold";
+
+
+                                    button.style.fontSize =
+                                        "20px";
+
+
+                                    button.style.lineHeight =
+                                        "1.5";
+
+
+                                    button.onclick =
+                                        () => {
+
+                                            submitAns(
+                                                index,
+                                                data.step
+                                            );
+
+                                        };
+
+
+                                    optionsDiv.appendChild(
+                                        button
+                                    );
+
+                                }
+                            );
+
+                    }
+
+                }
+
+            },
+
+
+            error => {
+
+                console.error(
+                    "Couple listener error:",
+                    error
+                );
+
+
+                toast(
+                    "לא ניתן לקרוא את מצב המשחק.",
+                    "var(--error)"
+                );
+
+            }
+
+        );
+
+}
+
+
+/* =========================================================
+   COUPLE ANSWER
+========================================================= */
+
+async function submitAns(
+    index,
+    step
+) {
+
+    try {
+
+        const snapshot =
+            await db
+                .collection(partsPath)
+                .get();
+
+
+        const batch =
+            db.batch();
+
+
+        snapshot.docs.forEach(
+            doc => {
+
+                const participant =
+                    doc.data();
+
+
+                if (
+                    participant.lastStep === step &&
+                    participant.choice === index
+                ) {
+
+                    batch.update(
+                        doc.ref,
+                        {
+
+                            score:
+                                (participant.score || 0) + 1
+
+                        }
+                    );
+
+                }
+
+            }
+        );
+
+
+        await batch.commit();
+
+
+        await db
+            .doc(configPath)
+            .update({
+
+                correctAns:
+                    index
+
+            });
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+
+        toast(
+            "לא ניתן לשמור את תשובת הזוג.",
+            "var(--error)"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FIREWORKS
+========================================================= */
 
 function startFireworks() {
 
     const canvas =
-        document.getElementById('fw-canvas');
+        document.getElementById(
+            "fw-canvas"
+        );
+
 
     const ctx =
-        canvas.getContext('2d');
+        canvas.getContext(
+            "2d"
+        );
+
 
     canvas.width =
         window.innerWidth;
 
+
     canvas.height =
         window.innerHeight;
+
 
     let particles = [];
 
 
-    function createFW(x, y) {
+    function createFirework(
+        x,
+        y
+    ) {
 
         const color =
             `hsl(${Math.random() * 360}, 100%, 60%)`;
 
-        for (let i = 0; i < 80; i++) {
+
+        for (
+            let i = 0;
+            i < 80;
+            i++
+        ) {
 
             const angle =
-                Math.random() * Math.PI * 2;
+                Math.random() *
+                Math.PI *
+                2;
+
 
             const speed =
-                Math.random() * 6 + 2;
+                Math.random() *
+                6 +
+                2;
+
 
             particles.push({
-                x,
-                y,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                alpha: 1,
-                color
+
+                x:
+                    x,
+
+                y:
+                    y,
+
+                vx:
+                    Math.cos(angle) *
+                    speed,
+
+                vy:
+                    Math.sin(angle) *
+                    speed,
+
+                alpha:
+                    1,
+
+                color:
+                    color
+
             });
 
         }
@@ -1860,48 +3990,83 @@ function startFireworks() {
             canvas.height
         );
 
-        particles.forEach((p, i) => {
 
-            p.x += p.vx;
-            p.y += p.vy;
-            p.vy += 0.04;
-            p.alpha -= 0.012;
+        particles.forEach(
+            (particle,index) => {
 
-            if (p.alpha <= 0) {
-                particles.splice(i, 1);
+                particle.x +=
+                    particle.vx;
+
+
+                particle.y +=
+                    particle.vy;
+
+
+                particle.vy +=
+                    0.04;
+
+
+                particle.alpha -=
+                    0.012;
+
+
+                if (
+                    particle.alpha <= 0
+                ) {
+
+                    particles.splice(
+                        index,
+                        1
+                    );
+
+                    return;
+                }
+
+
+                ctx.globalAlpha =
+                    particle.alpha;
+
+
+                ctx.fillStyle =
+                    particle.color;
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    particle.x,
+                    particle.y,
+                    2.5,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fill();
+
             }
-
-            ctx.globalAlpha =
-                p.alpha;
-
-            ctx.fillStyle =
-                p.color;
-
-            ctx.beginPath();
-
-            ctx.arc(
-                p.x,
-                p.y,
-                2.5,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fill();
-
-        });
+        );
 
 
         if (
-            Math.random() < 0.06
+            Math.random() <
+            0.06
         ) {
 
-            createFW(
-                Math.random() * canvas.width,
-                Math.random() * canvas.height * 0.4
+            createFirework(
+
+                Math.random() *
+                    canvas.width,
+
+                Math.random() *
+                    canvas.height *
+                    0.4
+
             );
 
         }
+
 
         requestAnimationFrame(
             animate
@@ -1909,7 +4074,29 @@ function startFireworks() {
 
     }
 
+
     animate();
+
+}
+
+
+/* =========================================================
+   BASIC HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
 
 }
 
